@@ -170,7 +170,47 @@ int main() {
         }
         cin >> choice;
 
-        // Kode selanjutnya dikerjakan oleh Irvandi dan Yoel
+        if (!loggedIn) {
+    switch (choice) {
+        case 1: { // Daftar
+            system("cls");
+            cout << "Masukkan username: ";
+            cin >> username;
+            cout << "Masukkan password: ";
+            cin >> password;
+            users.push_back(User(username, password));
+            sort(users.begin(), users.end());
+            cout << "Pendaftaran berhasil!" << endl;
+            getch();
+            break;
+        }
+        case 2: { // Masuk
+            system("cls");
+            cout << "Masukkan username: ";
+            cin >> username;
+            cout << "Masukkan password: ";
+            cin >> password;
+            int userIndex = binarySearch(users, username, 0, users.size() - 1);
+            if (userIndex != -1 && users[userIndex].checkPassword(password)) {
+                loggedIn = true;
+                cout << "Login berhasil!" << endl;
+            } else {
+                cout << "Username atau password salah." << endl;
+            }
+            getch();
+            break;
+        }
+        case 3: { // Keluar
+            system("cls");
+            cout << "Keluar..." << endl;
+            return 0;
+        }
+        default: {
+            cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
+            getch();
+        }
+    }
+}
 
     } while (choice != 3);
 
