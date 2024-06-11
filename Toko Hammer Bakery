@@ -1,0 +1,118 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <algorithm>
+#include <sstream>
+#include <iomanip>
+#include <conio.h>
+#include <windows.h>
+
+using namespace std;
+
+// Kelas untuk menyimpan informasi pengguna
+class User {
+private:
+    string username;
+    string password;
+public:
+    User(string u, string p) : username(u), password(p) {}
+
+    string getUsername() const {
+        return username;
+    }
+
+    string getPassword() const {
+        return password;
+    }
+
+    bool checkPassword(string p) const {
+        return password == p;
+    }
+
+    bool operator<(const User& other) const {
+        return username < other.username;
+    }
+};
+
+// Kelas template untuk menyimpan informasi kue
+template <typename T>
+class Cake {
+private:
+    string name;
+    T price;
+    string description;
+public:
+    Cake(string n, T p, string d) : name(n), price(p), description(d) {}
+
+    string getName() const {
+        return name;
+    }
+
+    T getPrice() const {
+        return price;
+    }
+
+    string getDescription() const {
+        return description;
+    }
+
+    void printCake(size_t nameWidth, size_t priceWidth, size_t descWidth) const {
+        cout << "| " << setw(nameWidth) << left << name << " | Rp" << setw(priceWidth) << left << price << " | " << setw(descWidth) << left << description << " |" << endl;
+    }
+};
+
+// Fungsi untuk menampilkan menu awal
+void displayInitialMenu() {
+    system("cls");
+    cout << "==========================================" << endl;
+    cout << "               MENU AWAL                 " << endl;
+    cout << "==========================================" << endl;
+    cout << "| 1. Daftar Akun                         |" << endl;
+    cout << "| 2. Masuk                               |" << endl;
+    cout << "| 3. Keluar                              |" << endl;
+    cout << "==========================================" << endl;
+    cout << "\nMasukkan Pilihan: ";
+}
+
+// Fungsi untuk menampilkan menu utama setelah login
+void displayMainMenu() {
+    system("cls");
+    cout << "==========================================" << endl;
+    cout << "               MENU UTAMA                " << endl;
+    cout << "==========================================" << endl;
+    cout << "| 1. Lihat Katalog Kue                   |" << endl;
+    cout << "| 2. Sesuaikan dan Pesan Kue             |" << endl;
+    cout << "| 3. Keluar                              |" << endl;
+    cout << "==========================================" << endl;
+    cout << "\nMasukkan Pilihan: ";
+}
+
+int main() {
+    vector<User> users = {User("hafiz", "1"), User("irvandi", "1"), User("yoel", "1")};
+    vector<Cake<double>> cakes;
+    cakes.push_back(Cake<double>("Kue Coklat", 10000.0, "Kue coklat yang lezat"));
+    cakes.push_back(Cake<double>("Kue Vanila", 12000.0, "Kue vanila yang enak"));
+    cakes.push_back(Cake<double>("Kue Red Velvet", 15000.0, "Kue red velvet yang menggugah selera"));
+
+    queue<string> orders;
+    stack<string> receipts;
+    string username, password;
+    bool loggedIn = false;
+    int choice;
+
+    do {
+        if (!loggedIn) {
+            displayInitialMenu();
+        } else {
+            displayMainMenu();
+        }
+        cin >> choice;
+
+        // Kode selanjutnya dikerjakan oleh Irvandi dan Yoel
+
+    } while (choice != 3);
+
+    return 0;
+}
