@@ -89,6 +89,66 @@ void displayMainMenu() {
     cout << "\nMasukkan Pilihan: ";
 }
 
+// Fungsi untuk mencari pengguna dengan divide and conquer
+int binarySearch(vector<User>& users, string username, int low, int high) {
+    if (high < low)
+        return -1;
+
+    int mid = (low + high) / 2;
+
+    if (users[mid].getUsername() == username)
+        return mid;
+    else if (users[mid].getUsername() > username)
+        return binarySearch(users, username, low, mid - 1);
+    else
+        return binarySearch(users, username, mid + 1, high);
+}
+
+// Fungsi untuk menampilkan antrean
+void displayOrders(queue<string> orders) {
+    system("cls");
+    cout << "Daftar pesanan saat ini:" << endl;
+    cout << "=========================" << endl;
+    if (!orders.empty()) {
+        while (!orders.empty()) {
+            cout << ">> [" << orders.front() << "]" << "\n";
+            orders.pop();
+        }
+    } else {
+        cout << "======Pesanan saat ini kosong======" << endl;
+    }
+    cout << "\n";
+    getch();
+}
+
+void displayCakeCatalog(const vector<Cake<double>>& cakes) {
+    system("cls");
+    
+    size_t nameWidth = 15;
+    size_t priceWidth = 7;
+    size_t descWidth = 30;
+
+    // Menghitung lebar kolom yang dibutuhkan
+    for (const auto& cake : cakes) {
+        nameWidth = max(nameWidth, cake.getName().length());
+        stringstream priceStream;
+        priceStream << fixed << setprecision(0) << cake.getPrice();
+        priceWidth = max(priceWidth, priceStream.str().length());
+        descWidth = max(descWidth, cake.getDescription().length());
+    }
+
+    string separator = "+-" + string(nameWidth, '-') + "-+-" + string(priceWidth + 2, '-') + "-+-" + string(descWidth, '-') + "-+";
+
+    cout << separator << endl;
+    cout << "| " << setw(nameWidth) << left << "Nama" << " | " << setw(priceWidth) << left << "Harga" << "   | " << setw(descWidth) << left << "Deskripsi" << " |" << endl;
+    cout << separator << endl;
+    for (const auto& cake : cakes) {
+        cake.printCake(nameWidth, priceWidth, descWidth);
+    }
+    cout << separator << endl;
+    getch();
+}
+
 int main() {
     vector<User> users = {User("hafiz", "1"), User("irvandi", "1"), User("yoel", "1")};
     vector<Cake<double>> cakes;
