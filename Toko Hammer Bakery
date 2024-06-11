@@ -149,6 +149,116 @@ void displayCakeCatalog(const vector<Cake<double>>& cakes) {
     getch();
 }
 
+void orderCakes(vector<Cake<double>>& cakes, queue<string>& orders, stack<string>& receipts) {
+    int cakeChoice, quantity, sizeChoice;
+    double basePrice;
+    string size;
+    char more;
+    double totalOrderPrice = 0.0;
+    vector<string> currentOrders;
+
+    do {
+        system("cls");
+
+        // Menampilkan kue yang tersedia dengan indeks
+        cout << "Kue yang tersedia untuk dipesan:" << endl;
+        for (size_t i = 0; i < cakes.size(); ++i) {
+            cout << (i + 1) << ". " << cakes[i].getName() << endl;
+        }
+
+        cout << "Pilih kue yang akan dipesan (1-" << cakes.size() << "): ";
+        cin >> cakeChoice;
+
+        if (cakeChoice < 1 || cakeChoice > (int)cakes.size()) {
+            cout << "Pilihan tidak valid." << endl;
+            getch();
+            continue;
+        }
+
+        Cake<double> selectedCake = cakes[cakeChoice - 1];
+        basePrice = selectedCake.getPrice();
+
+        cout << "Pilih ukuran kue untuk " << selectedCake.getName() << ": \n1. Kecil\n2. Sedang\n3. Besar\nPilihan: ";
+        cin >> sizeChoice;
+        switch (sizeChoice) {
+            case 1:
+                size = "Kecil";
+                break;
+            case 2:
+                size = "Sedang";
+                basePrice += 5000;
+                break;
+            case 3:
+                size = "Besar";
+                basePrice += 10000;
+                break;
+            default:
+                cout << "Pilihan tidak valid." << endl;
+                getch();
+                continue;
+        }
+
+        cout << "Masukkan jumlah yang akan dipesan: ";
+        cin >> quantity;
+        double totalPrice = basePrice * quantity;
+
+        cout << "Anda memilih: " << selectedCake.getName() << endl;
+        cout << "Ukuran: " << size << endl;
+        cout << "Jumlah: " << quantity << endl;
+        cout << "Total Harga: Rp" << totalPrice << endl;
+
+        orders.push(selectedCake.getName() + " (" + size + ")");
+        ostringstream receipt;
+        receipt << "Pesanan dikonfirmasi: " << selectedCake.getName() << " - Ukuran: " << size << " - Jumlah: " << quantity << " - Total Harga: Rp" << totalPrice;
+        receipts.push(receipt.str());
+        currentOrders.push_back(receipt.str());
+        totalOrderPrice += totalPrice;
+
+        cout << "Apakah Anda ingin menambahkan kue lain ke pesanan? (y/t): ";
+        cin >> more;
+
+    } while (more == 'y' || more == 'Y');
+
+    system("cls");
+    cout << "Ringkasan Pesanan Anda:" << endl;
+    for (const string& order : currentOrders) {
+        cout << order << endl;
+    }
+    cout << "\nTotal Harga Semua Pesanan: Rp" << totalOrderPrice << endl;
+
+    char paymentChoice;
+    cout << "Pilih tindakan: \n1. Bayar\n2. Batalkan Pesanan\nPilihan: ";
+    cin >> paymentChoice;
+
+    if (paymentChoice == '1') {
+        double paymentAmount;
+        double totalPayment = 0.0;
+        do {
+            cout << "Masukkan jumlah uang untuk membayar: Rp";
+            cin >> paymentAmount;
+            totalPayment += paymentAmount;
+
+            if (totalPayment < totalOrderPrice) {
+                cout << "Saldo tidak cukup. Pilih tindakan:\n1. Lanjutkan Pembayaran\n2. Batalkan Pesanan\nPilihan: ";
+                cin >> paymentChoice;
+                if (paymentChoice == '2') {
+                    cout << "Pesanan dibatalkan." << endl;
+                    return;
+                }
+            } else {
+                double change = totalPayment - totalOrderPrice;
+                cout << "Pembayaran berhasil." << endl;
+                cout << "Kembalian Anda: Rp" << change << endl;
+                cout << "Pesanan telah berhasil dilakukan!" << endl;
+            }
+        } while (totalPayment < totalOrderPrice);
+    } else {
+        cout << "Pesanan dibatalkan." << endl;
+    }
+
+    getch();
+}
+
 int main() {
     vector<User> users = {User("hafiz", "1"), User("irvandi", "1"), User("yoel", "1")};
     vector<Cake<double>> cakes;
@@ -210,7 +320,27 @@ int main() {
             getch();
         }
     }
-}
+} else {
+            switch (choice) {
+                case 1: { // Lihat Katalog Kue
+                    displayCakeCatalog(cakes);
+                    break;
+                }
+                case 2: { // Sesuaikan dan Pesan Kue
+                    orderCakes(cakes, orders, receipts);
+                    break;
+                }
+                case 3: { // Keluar
+                    system("cls");
+                    cout << "Keluar..." << endl;
+                    return 0;
+                }
+                default: {
+                    cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
+                    getch();
+                }
+            }
+        }
 
     } while (choice != 3);
 
